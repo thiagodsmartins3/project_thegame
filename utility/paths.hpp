@@ -2,7 +2,9 @@
 #define PATHS_HPP
 
 #include <SDL3/SDL_filesystem.h>
+#include <SDL3/SDL_stdinc.h>
 #include <string>
+#include <iostream>
 
 class Paths {
     public:
@@ -31,7 +33,17 @@ class Paths {
         Paths() {} 
 
         std::string getBasePath() {
-            std::string basePath = SDL_GetBasePath();
+            const char *path = SDL_GetBasePath();
+            std::string basePath;
+
+            if (path) {
+                basePath = path;
+                SDL_free(static_cast<void*>(const_cast<char*>(path)));
+            } else {
+                std::cout << SDL_GetError() << std::endl;
+                return "";
+            }
+
             size_t foundBuild = basePath.find("build");
             size_t foundBin = basePath.find("bin");
             
