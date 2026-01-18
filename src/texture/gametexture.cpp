@@ -11,10 +11,6 @@ GameTexture::~GameTexture() {
     if (texture) {
         SDL_DestroyTexture(texture.get());
     }
-
-    // if (renderer) {
-    //     SDL_DestroyRenderer(renderer.get());
-    // }
 }
 
 void GameTexture::loadFromFile(std::string path) {
