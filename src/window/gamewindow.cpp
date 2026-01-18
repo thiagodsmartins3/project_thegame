@@ -2,8 +2,6 @@
 #include "../../include/texture/gametexture.hpp"
 #include "../exception/exception.hpp"
 #include <iostream>
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
 
 GameWindow::GameWindow() {
     try {
@@ -118,6 +116,7 @@ void GameWindow::run() {
             }
         }
 
+        SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(renderer.get());
         gt.render(100, 100);
         SDL_RenderPresent(renderer.get());

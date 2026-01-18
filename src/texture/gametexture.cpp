@@ -1,9 +1,6 @@
 #include "../../include/texture/gametexture.hpp"
 #include "../../include/exception/exception.hpp"
 #include <iostream>
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
-#include <SDL3_image/SDL_image.h>
 
 GameTexture::GameTexture(std::string& path, std::shared_ptr<SDL_Renderer>& rendererPtr) {
     renderer = rendererPtr;
@@ -63,8 +60,6 @@ float GameTexture::textureHeight() const {
 }
 
 void GameTexture::render(float x, float y) {
-    // auto p = renderer.lock();
-
     SDL_FRect dstRect{ x, y, static_cast<float>(width), static_cast<float>(height) };
     SDL_RenderTexture((renderer.lock()).get(), texture.get(), nullptr, &dstRect);
 }
