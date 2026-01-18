@@ -1,6 +1,7 @@
 #include "../../include/window/gamewindow.hpp"
 #include "../../include/texture/gametexture.hpp"
 #include "../exception/exception.hpp"
+#include "../../utility/paths.hpp"
 #include <iostream>
 
 GameWindow::GameWindow() {
@@ -106,7 +107,7 @@ GameWindow::~GameWindow() {
 
 void GameWindow::run() {
     isRunning = true;
-    std::string path = "../assets/cat_img.png";
+    std::string path = Paths::getInstance().IMAGES() + "cat_img.png";
     GameTexture gt(path, renderer);
 
     while (isRunning) {

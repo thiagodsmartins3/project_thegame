@@ -4,6 +4,10 @@ project(TheGame)
 set(PROJECT_NAME TheGame)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+
+set(BIN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 set(
     SRCS
@@ -21,8 +25,6 @@ set(
 )
 
 include(FetchContent)
-#add_compile_options(-arch arm64)
-
 
 FetchContent_Declare(
     SDL3
@@ -40,9 +42,20 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(SDL3_Image)
 
+add_compile_definitions(DEBUG)
+
 add_executable(
     ${PROJECT_NAME}
     ${SRCS}
+)
+
+add_custom_command(
+    TARGET TheGame
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}
+        ${BIN_PATH} 
+    COMMENT "Copying executable to bin folder"
 )
 
 include_directories(

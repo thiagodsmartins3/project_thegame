@@ -1,5 +1,6 @@
 #include "../include/window/gamewindow.hpp"
 #include "../include/exception/exception.hpp"
+#include "../utility/paths.hpp"
 #include <iostream>
 
 int main() {
