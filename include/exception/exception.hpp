@@ -5,12 +5,14 @@
 #include <string>
 
 class Exception : public std::exception {
-    std::string msg_;
-public:
-    explicit Exception(std::string msg) noexcept : msg_(std::move(msg)) {}
-    const char* what() const noexcept override {
-        return msg_.c_str();
-    }
+    public:
+        explicit Exception(std::string msg) noexcept : message(std::move(msg)) {}
+        const char* what() const noexcept override {
+            return message.c_str();
+        }
+
+    private:
+        std::string message;
 };
 
 #endif
