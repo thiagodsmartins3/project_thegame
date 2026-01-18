@@ -6,3 +6,4 @@ build/Makefile
 build/TheGame
 build/bin
 bin/TheGame
+utility/debuglogger/Logger
