@@ -62,7 +62,10 @@ add_custom_command(
     COMMENT "Copying executable to bin folder"
 )
 
-file(COPY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DebugLogger DESTINATION ${BIN_PATH})   
+file(
+    COPY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DebugLogger 
+    DESTINATION ${BIN_PATH}
+)   
 
 include_directories(
     ${INC}
