@@ -1,6 +1,8 @@
 #include <memory>
 #include <iostream>
 #include <cstdio>
+#include <fcntl.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include "logger.hpp"
 

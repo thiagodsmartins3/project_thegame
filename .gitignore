@@ -1,9 +1,2 @@
-build/_deps
-build/CMakeFiles
-build/cmake_install.cmake
-build/CmakeCache.txt
-build/Makefile
-build/TheGame
-build/bin
-bin/TheGame
-utility/debuglogger/Logger
+bin/*
+build/*

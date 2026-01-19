@@ -24,6 +24,8 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/include/utility
 )
 
+set(LOGGER ${CMAKE_CURRENT_SOURCE_DIR}/utility)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -44,6 +46,8 @@ FetchContent_MakeAvailable(SDL3_Image)
 
 add_compile_definitions(DEBUG)
 
+add_subdirectory(${LOGGER})
+
 add_executable(
     ${PROJECT_NAME}
     ${SRCS}
@@ -57,6 +61,8 @@ add_custom_command(
         ${BIN_PATH} 
     COMMENT "Copying executable to bin folder"
 )
+
+file(COPY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DebugLogger DESTINATION ${BIN_PATH})   
 
 include_directories(
     ${INC}
