@@ -44,6 +44,14 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(SDL3_Image)
 
+FetchContent_Declare(
+    portaudio
+    GIT_REPOSITORY https://github.com/PortAudio/portaudio.git
+    GIT_TAG master 
+)
+
+FetchContent_MakeAvailable(portaudio)
+
 add_compile_definitions(DEBUG)
 
 add_subdirectory(${LOGGER})
@@ -62,12 +70,7 @@ add_custom_command(
     COMMENT "Copying executable to bin folder"
 )
 
-file(
-    COPY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DebugLogger 
-    DESTINATION ${BIN_PATH}
-)   
-
-include_directories(
+ include_directories(
     ${INC}
 )
 
@@ -76,4 +79,5 @@ target_link_libraries(
     PRIVATE 
     SDL3::SDL3
     SDL3_image::SDL3_image
+    portaudio
 )

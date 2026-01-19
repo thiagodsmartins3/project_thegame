@@ -27,3 +27,8 @@ add_executable(
 include_directories(
     ${INC}
 )
+
+#file(
+#    COPY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DebugLogger 
+#    DESTINATION ${BIN_PATH}
+#)
