@@ -104,6 +104,5 @@ void GameAudio::audioProgress(sf_count_t current, sf_count_t total) {
         else std::cout << " ";
     }
 
-    std::cout << "] " << (int)(progress * 100) << "%" << std::endl;
-    fflush(stdout);
+    std::cout << "] " << (int)(progress * 100) << "%" << std::flush;
 }
