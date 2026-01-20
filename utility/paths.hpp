@@ -25,8 +25,16 @@ class Paths {
             return getBasePath() + "images/";
         }
 
-        std::string SOUND() {
-            return getBasePath() + "sound/";
+        std::string IMAGES(const std::string path) {
+            return getBasePath() + "images/" + path;
+        }
+
+        std::string AUDIO() {
+            return getBasePath() + "audio/";
+        }
+
+        std::string AUDIO(const std::string path) {
+            return getBasePath() + "audio/" + path;
         }
 
     private:

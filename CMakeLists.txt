@@ -14,6 +14,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/window/gamewindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/texture/gametexture.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/audio/gameaudio.cpp
 )
 
 set(
@@ -22,6 +23,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/include/exception
     ${CMAKE_CURRENT_SOURCE_DIR}/include/texture
     ${CMAKE_CURRENT_SOURCE_DIR}/include/utility
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/audio
 )
 
 set(LOGGER ${CMAKE_CURRENT_SOURCE_DIR}/utility)
@@ -52,6 +54,14 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(portaudio)
 
+FetchContent_Declare(
+    libsndfile
+    GIT_REPOSITORY https://github.com/libsndfile/libsndfile.git
+    GIT_TAG master
+)
+
+FetchContent_MakeAvailable(libsndfile)
+
 add_compile_definitions(DEBUG)
 
 add_subdirectory(${LOGGER})
@@ -80,4 +90,5 @@ target_link_libraries(
     SDL3::SDL3
     SDL3_image::SDL3_image
     portaudio
+    sndfile
 )
