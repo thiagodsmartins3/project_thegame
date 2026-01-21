@@ -46,7 +46,6 @@ class Paths {
 
             if (path) {
                 basePath = path;
-                SDL_free(static_cast<void*>(const_cast<char*>(path)));
             } else {
                 std::cout << SDL_GetError() << std::endl;
                 return "";

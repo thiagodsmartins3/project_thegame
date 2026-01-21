@@ -84,6 +84,8 @@ add_custom_command(
     ${INC}
 )
 
+target_compile_options(${PROJECT_NAME} PRIVATE -g)
+
 target_link_libraries(
     ${PROJECT_NAME} 
     PRIVATE 
