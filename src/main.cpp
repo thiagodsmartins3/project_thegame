@@ -15,19 +15,25 @@ int main() {
 
     ga.setAudioFiles(files);
     ga.play();
-    // std::unique_ptr<GameWindow> gw;
-    // GameWindow::GameWindowInfo windowInfo = {
-    //     "Test",
-    //     800,
-    //     600
-    // };
-        
-    // try {
-    //     gw = std::make_unique<GameWindow>(windowInfo);
-    //     gw->run();
-    // } catch (const Exception& ex) {
-    //     std::cout << ex.what() << std::endl;
-    // }
 
+    // std::cin.get();
+
+    // ga.stop();
+
+    std::unique_ptr<GameWindow> gw;
+    GameWindow::GameWindowInfo windowInfo = {
+        "Test",
+        800,
+        600
+    };
+        
+    try {
+        gw = std::make_unique<GameWindow>(windowInfo);
+        gw->run();
+    } catch (const Exception& ex) {
+        std::cout << ex.what() << std::endl;
+    }
+
+    
     return 0;
 }

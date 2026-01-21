@@ -7,6 +7,8 @@
 #include <portaudio.h>
 #include <sndfile.h>
 #include <vector>
+#include <thread>
+#include <atomic>
 
 #define TABLE_SIZE 200
 
@@ -55,11 +57,13 @@ class GameAudio {
     private:
         typedef struct {
             SNDFILE *audioFile;
+            SNDFILE *nextFile;
             SF_INFO audioInfo;
             float volume;          
             sf_count_t currentPos;
             int isPaused; 
             int skipRequested;
+            int triggerNext;
         } AudioData;
 
         void initAudioBuffer();
@@ -74,6 +78,8 @@ class GameAudio {
         PaStreamParameters streamParameters;
         AudioData audioData;
         std::vector<std::string> audioFiles;
+        std::thread audioWorkThread;
+        std::atomic<bool> isPlaying;
 };
 
 #endif

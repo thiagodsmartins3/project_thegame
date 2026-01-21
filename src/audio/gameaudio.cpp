@@ -20,7 +20,7 @@ void GameAudio::play() {
     if (audioFiles.empty()) {
         std::cout << "No files set to play" << std::endl;
     } else {
-        playAudio();
+        audioWorkThread = std::thread(&GameAudio::playAudio, this);
     }
 }
 
@@ -29,7 +29,18 @@ void GameAudio::pause() {
 }
 
 void GameAudio::stop() {
-    // TODO: Will be implemented soon
+    if (stream) {
+        Pa_StopStream(stream);
+        Pa_CloseStream(stream);
+    }
+    
+    if (audioWorkThread.joinable()) {
+        audioWorkThread.join();
+    }
+
+    if (audioData.audioFile) {
+        sf_close(audioData.audioFile);
+    }
 }
 
 void GameAudio::setAudioFile(std::string file) {
@@ -64,7 +75,7 @@ void GameAudio::startStream() {
         audioProgress(audioData.currentPos, audioData.audioInfo.frames);
         #endif
 
-        Pa_Sleep(100); 
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     Pa_StopStream(stream);
