@@ -34,6 +34,7 @@ int main() {
         std::cout << ex.what() << std::endl;
     }
 
+    ga.stop();
     
     return 0;
 }

@@ -72,6 +72,7 @@ class GameAudio {
         std::string removePath(std::string filePath, std::string path);
         void playAudio();
         void startStream();
+        void cleanupTrack();
 
     private:
         PaStream* stream;

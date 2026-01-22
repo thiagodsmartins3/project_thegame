@@ -78,9 +78,7 @@ void GameAudio::startStream() {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    Pa_StopStream(stream);
-    Pa_CloseStream(stream);
-    sf_close(audioData.audioFile);
+    cleanupTrack();
 }
 
 void GameAudio::playAudio() {
@@ -182,4 +180,15 @@ std::string GameAudio::removePath(std::string filePath, std::string path) {
     }
 
     return "";
+}
+
+void GameAudio::cleanupTrack() {
+    if (stream) {
+        Pa_StopStream(stream);
+        Pa_CloseStream(stream);
+    }
+
+    if (audioData.audioFile) {
+        sf_close(audioData.audioFile);
+    }
 }
