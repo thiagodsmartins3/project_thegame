@@ -116,6 +116,7 @@ void GameAudio::playAudio() {
 }
 
 void GameAudio::initAudioBuffer() {
+    PaError error;
     stream = nullptr;
     std::string message;
 
