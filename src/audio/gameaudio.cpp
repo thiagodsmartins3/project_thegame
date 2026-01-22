@@ -5,7 +5,15 @@
 #include <cstdlib>
 
 GameAudio::GameAudio() {
+    PaError error = Pa_Initialize();
 
+    if (error != paNoError) {
+        throw Exception("PortAudio error:" + std::string(Pa_GetErrorText(error)));
+    }
+
+    #ifdef DEBUG
+    std::cout << "Audio initialized" << std::endl;
+    #endif
 }
 
 GameAudio::~GameAudio() {
@@ -20,7 +28,7 @@ void GameAudio::play() {
     if (audioFiles.empty()) {
         std::cout << "No files set to play" << std::endl;
     } else {
-        playAudio();
+        audioWorkThread = std::thread(&GameAudio::playAudio, this);
     }
 }
 
@@ -29,7 +37,18 @@ void GameAudio::pause() {
 }
 
 void GameAudio::stop() {
-    // TODO: Will be implemented soon
+    if (stream) {
+        Pa_StopStream(stream);
+        Pa_CloseStream(stream);
+    }
+    
+    if (audioWorkThread.joinable()) {
+        audioWorkThread.join();
+    }
+
+    if (audioData.audioFile) {
+        sf_close(audioData.audioFile);
+    }
 }
 
 void GameAudio::setAudioFile(std::string file) {
@@ -64,12 +83,10 @@ void GameAudio::startStream() {
         audioProgress(audioData.currentPos, audioData.audioInfo.frames);
         #endif
 
-        Pa_Sleep(100); 
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    Pa_StopStream(stream);
-    Pa_CloseStream(stream);
-    sf_close(audioData.audioFile);
+    cleanupTrack();
 }
 
 void GameAudio::playAudio() {
@@ -99,13 +116,9 @@ void GameAudio::playAudio() {
 }
 
 void GameAudio::initAudioBuffer() {
-    PaError error = Pa_Initialize();
+    PaError error;
     stream = nullptr;
     std::string message;
-
-    if (error != paNoError) {
-        throw Exception("PortAudio error:" + std::string(Pa_GetErrorText(error)));
-    }
 
     streamParameters.device = Pa_GetDefaultOutputDevice();
     streamParameters.channelCount = audioData.audioInfo.channels;
@@ -171,4 +184,15 @@ std::string GameAudio::removePath(std::string filePath, std::string path) {
     }
 
     return "";
+}
+
+void GameAudio::cleanupTrack() {
+    if (stream) {
+        Pa_StopStream(stream);
+        Pa_CloseStream(stream);
+    }
+
+    if (audioData.audioFile) {
+        sf_close(audioData.audioFile);
+    }
 }
