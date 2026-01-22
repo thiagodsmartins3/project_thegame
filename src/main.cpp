@@ -5,20 +5,16 @@
 #include <iostream>
 
 int main() {
-    GameAudio ga;
+    // GameAudio ga;
 
-    std::vector<std::string> files = {
-        Paths::getInstance().AUDIO("sound_test1.wav"),
-        Paths::getInstance().AUDIO("sound_test2.wav"),
-        Paths::getInstance().AUDIO("sound_test3.wav")
-    };
+    // std::vector<std::string> files = {
+    //     Paths::getInstance().AUDIO("sound_test1.wav"),
+    //     Paths::getInstance().AUDIO("sound_test2.wav"),
+    //     Paths::getInstance().AUDIO("sound_test3.wav")
+    // };
 
-    ga.setAudioFiles(files);
-    ga.play();
-
-    // std::cin.get();
-
-    // ga.stop();
+    // ga.setAudioFiles(files);
+    // ga.play();
 
     std::unique_ptr<GameWindow> gw;
     GameWindow::GameWindowInfo windowInfo = {
@@ -34,7 +30,7 @@ int main() {
         std::cout << ex.what() << std::endl;
     }
 
-    ga.stop();
+    //ga.stop();
     
     return 0;
 }

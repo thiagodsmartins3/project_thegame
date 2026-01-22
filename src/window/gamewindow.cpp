@@ -87,6 +87,16 @@ GameWindow::GameWindow(const GameWindowInfo& windowInfo) {
     if (renderer == nullptr) {
         throw Exception("Renderer error:" + std::string(SDL_GetError()));
     }
+
+    bool isVSYNCEnable = SDL_SetRenderVSync(renderer.get(), 1);
+
+    #ifdef DEBUG
+    if (isVSYNCEnable) {
+        std::cout << "VSYNC Enable" << std::endl;
+    } else {
+        std::cout << "Could not enable VSYNC" << std::endl;
+    }
+    #endif
 }
 
 GameWindow::~GameWindow() {
@@ -107,7 +117,7 @@ GameWindow::~GameWindow() {
 
 void GameWindow::run() {
     isRunning = true;
-    std::string path = Paths::getInstance().IMAGES() + "cat_img.png";
+    std::string path = Paths::getInstance().IMAGES("cat_img.png");
     GameTexture gt(path, renderer);
 
     while (isRunning) {
