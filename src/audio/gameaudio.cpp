@@ -5,7 +5,15 @@
 #include <cstdlib>
 
 GameAudio::GameAudio() {
+    PaError error = Pa_Initialize();
 
+    if (error != paNoError) {
+        throw Exception("PortAudio error:" + std::string(Pa_GetErrorText(error)));
+    }
+
+    #ifdef DEBUG
+    std::cout << "Audio initialized" << std::endl;
+    #endif
 }
 
 GameAudio::~GameAudio() {
@@ -108,13 +116,8 @@ void GameAudio::playAudio() {
 }
 
 void GameAudio::initAudioBuffer() {
-    PaError error = Pa_Initialize();
     stream = nullptr;
     std::string message;
-
-    if (error != paNoError) {
-        throw Exception("PortAudio error:" + std::string(Pa_GetErrorText(error)));
-    }
 
     streamParameters.device = Pa_GetDefaultOutputDevice();
     streamParameters.channelCount = audioData.audioInfo.channels;
