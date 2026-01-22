@@ -120,12 +120,34 @@ void GameWindow::run() {
     std::string path = Paths::getInstance().IMAGES("cat_img.png");
     GameTexture gt(path, renderer);
 
+    const float dt = 0.01f; 
+    float accumulator = 0.0f;
+
+    Uint64 currentTime = SDL_GetPerformanceCounter();
+    float frequency = static_cast<float>(SDL_GetPerformanceFrequency());
+
     while (isRunning) {
+        Uint64 newTime = SDL_GetPerformanceCounter();
+        float frameTime = (newTime - currentTime) / frequency;
+        
+        if (frameTime > 0.25f) frameTime = 0.25f; 
+        
+        currentTime = newTime;
+        accumulator += frameTime;
+
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 isRunning = false;
             }
         }
+
+        while (accumulator >= dt) {
+            // Update data here
+            
+            accumulator -= dt;
+        }
+
+        float alpha = accumulator / dt;
 
         SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(renderer.get());
