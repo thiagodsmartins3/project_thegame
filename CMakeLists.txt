@@ -17,6 +17,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/audio/gameaudio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fps/gamefps.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/menu/gamemainmenu.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/menu/gamesettingsmenu.cpp
 )
 
 set(
@@ -27,7 +28,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/include/utility
     ${CMAKE_CURRENT_SOURCE_DIR}/include/audio
     ${CMAKE_CURRENT_SOURCE_DIR}/include/fps
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/menu/gamemainmenu.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/menu
 )
 
 set(LOGGER ${CMAKE_CURRENT_SOURCE_DIR}/utility)
