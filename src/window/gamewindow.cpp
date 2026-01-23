@@ -4,6 +4,7 @@
 #include "../exception/exception.hpp"
 #include "../../utility/paths.hpp"
 #include "../../include/menu/gamemainmenu.hpp"
+#include "../../include/menu/gamesettingsmenu.hpp"
 
 GameWindow::GameWindow() {
     try {
@@ -134,6 +135,7 @@ void GameWindow::run() {
     GameTexture gt(path, renderer);
 
     GameMainMenu gameMainMenu(renderer.get(), font);
+    GameSettingsMenu gameSettings;
 
     const float dt = 0.01f; 
     float accumulator = 0.0f;
@@ -178,6 +180,10 @@ void GameWindow::run() {
                             case SDL_SCANCODE_SPACE:
                                 gameMainMenu.status(GameMainMenu::AppState::MainMenu);
                                 break;
+                            case SDL_SCANCODE_RIGHT:
+                                gameSettings.nextResolution();
+                            case SDL_SCANCODE_RETURN:
+                                gameSettings.applySettings(window.get(), renderer.get());
                             default:
                                 break;
                         }
@@ -185,7 +191,6 @@ void GameWindow::run() {
                 }
 
                 while (accumulator >= dt) {
-                    // Update data here
                     accumulator -= dt;
                 }
 
@@ -204,6 +209,22 @@ void GameWindow::run() {
         }
 
         SDL_RenderPresent(renderer.get());
+    }
+}
+
+void GameWindow::getAvaliableDisplayResolutions() {
+    int count = 0;
+    SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
+    
+    SDL_DisplayMode** modes = SDL_GetFullscreenDisplayModes(displayID, &count);
+
+    if (modes) {
+        std::cout << "Available Display Resolutions:\n";
+        for (int i = 0; i < count; i++) {
+            std::cout << i << ":" << modes[i]->w << " x " << "modes[i]->h" << std::endl;
+        }
+        
+        SDL_free(modes); 
     }
 }
 

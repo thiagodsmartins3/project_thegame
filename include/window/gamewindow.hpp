@@ -22,6 +22,7 @@ class GameWindow {
         GameWindow(const GameWindowInfo& windowInfo);
         ~GameWindow();
         void run();
+        void getAvaliableDisplayResolutions();
 
     private:
         void setupWindow();
