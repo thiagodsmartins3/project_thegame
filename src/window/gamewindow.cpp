@@ -1,8 +1,9 @@
+#include <iostream>
 #include "../../include/window/gamewindow.hpp"
 #include "../../include/texture/gametexture.hpp"
 #include "../exception/exception.hpp"
 #include "../../utility/paths.hpp"
-#include <iostream>
+#include "../../include/menu/gamemainmenu.hpp"
 
 GameWindow::GameWindow() {
     try {
@@ -132,8 +133,11 @@ void GameWindow::run() {
     std::string path = Paths::getInstance().IMAGES("cat_img.png");
     GameTexture gt(path, renderer);
 
+    GameMainMenu gameMainMenu(renderer.get(), font);
+
     const float dt = 0.01f; 
     float accumulator = 0.0f;
+    float alpha = 0.0f;
 
     Uint64 currentTime = SDL_GetPerformanceCounter();
     float frequency = static_cast<float>(SDL_GetPerformanceFrequency());
@@ -147,35 +151,69 @@ void GameWindow::run() {
         currentTime = newTime;
         accumulator += frameTime;
 
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
+        switch(gameMainMenu.status()) {
+            case GameMainMenu::AppState::MainMenu:
+                while (SDL_PollEvent(&event)) {
+                    gameMainMenu.eventHandler(&event);
+
+                    if (event.type == SDL_EVENT_QUIT) {
+                        isRunning = false;
+                    }
+                }
+
+                SDL_SetRenderDrawColor(renderer.get(), 10, 10, 10, 255);
+                SDL_RenderClear(renderer.get());
+                gameMainMenu.draw(renderer.get());
+                break;
+
+            case GameMainMenu::AppState::Playing:
+                while (SDL_PollEvent(&event)) {
+                    if (event.type == SDL_EVENT_QUIT) {
+                        isRunning = false;
+                        break;
+                    } 
+
+                    if (event.type == SDL_EVENT_KEY_DOWN) {
+                        switch (event.key.scancode) {
+                            case SDL_SCANCODE_SPACE:
+                                gameMainMenu.status(GameMainMenu::AppState::MainMenu);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                while (accumulator >= dt) {
+                    // Update data here
+                    accumulator -= dt;
+                }
+
+                alpha = accumulator / dt;
+                
+                SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
+                SDL_RenderClear(renderer.get());
+                gt.render(100, 100);
+                fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
+                fps.draw(renderer.get());
+                break;
+
+            case GameMainMenu::AppState::Quitting:
                 isRunning = false;
-            }
+                break;
         }
 
-        while (accumulator >= dt) {
-            // Update data here
-            accumulator -= dt;
-        }
-
-        float alpha = accumulator / dt;
-        
-        SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderClear(renderer.get());
-        gt.render(100, 100);
-        fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
-        fps.draw(renderer.get());
         SDL_RenderPresent(renderer.get());
     }
 }
 
 void GameWindow::setupWindow() {
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        throw Exception("Video error:" + std::string(SDL_GetError()));
-    }
-
     if (!TTF_Init()) {
         throw Exception("Error initializing fonts");
+    }
+
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        throw Exception("Video error:" + std::string(SDL_GetError()));
     }
 
     font = TTF_OpenFont(Paths::getInstance().FONT("leadcoat.ttf").c_str(), 24);
