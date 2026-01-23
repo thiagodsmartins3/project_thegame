@@ -51,6 +51,16 @@ GameWindow::GameWindow() {
     if (renderer == nullptr) {
         throw Exception("Renderer error:" + std::string(SDL_GetError()));
     }
+
+    bool isVSYNCEnable = SDL_SetRenderVSync(renderer.get(), 1);
+
+    #ifdef DEBUG
+    if (isVSYNCEnable) {
+        std::cout << "VSYNC Enable" << std::endl;
+    } else {
+        std::cout << "Could not enable VSYNC" << std::endl;
+    }
+    #endif
 }
 
 GameWindow::GameWindow(const GameWindowInfo& windowInfo) {
@@ -112,6 +122,8 @@ GameWindow::~GameWindow() {
         SDL_DestroyRenderer(renderer.get());
     }
 
+    TTF_CloseFont(font);
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -143,15 +155,16 @@ void GameWindow::run() {
 
         while (accumulator >= dt) {
             // Update data here
-            
             accumulator -= dt;
         }
 
         float alpha = accumulator / dt;
-
+        
         SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(renderer.get());
         gt.render(100, 100);
+        fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
+        fps.draw(renderer.get());
         SDL_RenderPresent(renderer.get());
     }
 }
@@ -159,5 +172,15 @@ void GameWindow::run() {
 void GameWindow::setupWindow() {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         throw Exception("Video error:" + std::string(SDL_GetError()));
+    }
+
+    if (!TTF_Init()) {
+        throw Exception("Error initializing fonts");
+    }
+
+    font = TTF_OpenFont(Paths::getInstance().FONT("leadcoat.ttf").c_str(), 24);
+
+    if (!font) {
+        throw Exception("Could not initialize font");
     }
 }

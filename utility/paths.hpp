@@ -37,6 +37,14 @@ class Paths {
             return getBasePath() + "audio/" + path;
         }
 
+        std::string FONT() {
+            return getBasePath() + "font/";
+        }
+        
+        std::string FONT(const std::string path) {
+            return getBasePath() + "font/" + path;
+        }
+
     private:
         Paths() {} 
 
