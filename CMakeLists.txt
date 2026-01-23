@@ -15,6 +15,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/window/gamewindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/texture/gametexture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/audio/gameaudio.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/fps/gamefps.cpp
 )
 
 set(
@@ -24,6 +25,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/include/texture
     ${CMAKE_CURRENT_SOURCE_DIR}/include/utility
     ${CMAKE_CURRENT_SOURCE_DIR}/include/audio
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/fps
 )
 
 set(LOGGER ${CMAKE_CURRENT_SOURCE_DIR}/utility)
@@ -62,9 +64,20 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(libsndfile)
 
+FetchContent_MakeAvailable(portaudio)
+
+FetchContent_Declare(
+    SDL_ttf
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+    GIT_TAG release-3.2.2
+)
+
+FetchContent_MakeAvailable(SDL_ttf)
+
+
 add_compile_definitions(DEBUG)
 
-add_subdirectory(${LOGGER})
+#add_subdirectory(${LOGGER})
 
 add_executable(
     ${PROJECT_NAME}
@@ -84,13 +97,17 @@ add_custom_command(
     ${INC}
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE -g)
+target_compile_options(
+    ${PROJECT_NAME} 
+    PRIVATE -g -O0
+)
 
 target_link_libraries(
     ${PROJECT_NAME} 
     PRIVATE 
     SDL3::SDL3
     SDL3_image::SDL3_image
+    SDL3_ttf::SDL3_ttf
     portaudio
     sndfile
 )

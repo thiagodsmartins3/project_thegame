@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include "../../utility/sdldeleters.hpp"
+#include "../fps/gamefps.hpp"
 
 class GameWindow {
     public:
@@ -32,6 +33,8 @@ class GameWindow {
         SDL_Event event;
         GameWindowInfo gameWindowInfo;
         bool isRunning;
+        GameFps fps;
+        TTF_Font* font;
 };
 
 #endif
