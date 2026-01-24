@@ -18,6 +18,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/fps/gamefps.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/menu/gamemainmenu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/menu/gamesettingsmenu.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/savemanager/gamesavemanager.cpp
 )
 
 set(
@@ -29,6 +30,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/include/audio
     ${CMAKE_CURRENT_SOURCE_DIR}/include/fps
     ${CMAKE_CURRENT_SOURCE_DIR}/include/menu
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/savemanager
 )
 
 set(LOGGER ${CMAKE_CURRENT_SOURCE_DIR}/utility)
@@ -77,6 +79,15 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(SDL_ttf)
 
+FetchContent_MakeAvailable(portaudio)
+
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG develop
+)
+
+FetchContent_MakeAvailable(json)
 
 add_compile_definitions(DEBUG)
 
@@ -113,4 +124,5 @@ target_link_libraries(
     SDL3_ttf::SDL3_ttf
     portaudio
     sndfile
+    nlohmann_json::nlohmann_json
 )

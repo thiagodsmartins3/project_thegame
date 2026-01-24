@@ -45,6 +45,18 @@ class Paths {
             return getBasePath() + "font/" + path;
         }
 
+        std::string SAVE() {
+            return getBasePathToSave();
+        }
+
+        std::string SAVECONFIG(const std::string file) {
+            return getBasePathToSave() + file;
+        }
+
+        std::string SAVEGAME(const std::string file) {
+            return getBasePathToSave() + file;
+        }
+
     private:
         Paths() {} 
 
@@ -69,6 +81,20 @@ class Paths {
             } else {
                 return basePath + "assets/";
             }
+        }
+
+        std::string getBasePathToSave() {
+            const char *path = SDL_GetBasePath();
+            std::string basePath;
+
+            if (path) {
+                basePath = path;
+            } else {
+                std::cout << SDL_GetError() << std::endl;
+                return "";
+            }
+
+            return basePath + "save/";
         }
 
     private:
