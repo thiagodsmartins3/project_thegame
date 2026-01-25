@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SDL3_image/SDL_image.h>
 #include "../../include/window/gamewindow.hpp"
 #include "../../include/texture/gametexture.hpp"
 #include "../exception/exception.hpp"
@@ -6,6 +7,7 @@
 #include "../../include/menu/gamemainmenu.hpp"
 #include "../../include/menu/gamesettingsmenu.hpp"
 #include "../../include/savemanager/gamesavemanager.hpp"
+#include "../../include/character/gamecharacter.hpp"
 
 GameWindow::GameWindow() {
     try {
@@ -133,9 +135,17 @@ GameWindow::~GameWindow() {
 void GameWindow::run() {
     isRunning = true;
     std::string path = Paths::getInstance().IMAGES("cat_img.png");
-    GameTexture gt(path, renderer);
+    // GameTexture gt(path, renderer);
 
     GameMainMenu gameMainMenu(renderer.get(), font);
+    GameCharacter player(renderer.get());
+    SDL_Texture* background = IMG_LoadTexture(renderer.get(), Paths::getInstance().IMAGES("background.png").c_str());
+    SDL_FRect camera = { 0, 0, 1280, 720 };
+    SDL_FRect worldBounds = { 0, 0, 2560, 1440 };
+    SDL_FRect bgDst;
+    float vx, vy;
+    bool* keys;
+
     GameSettingsMenu gameSettings;
     GameSaveManager saveManager;
 
@@ -199,15 +209,39 @@ void GameWindow::run() {
                     }
                 }
 
+                keys = const_cast<bool*>(SDL_GetKeyboardState(NULL));
+                vx = 0, vy = 0;
+                if (keys[SDL_SCANCODE_A]) vx = -1;
+                if (keys[SDL_SCANCODE_D]) vx = 1;
+                if (keys[SDL_SCANCODE_W]) vy = -1;
+                if (keys[SDL_SCANCODE_S]) vy = 1;
+
                 while (accumulator >= dt) {
+                    player.update(dt, vx, vy);
+
+                    if (player.getWorldPosX() < 0) player.setWorldPosX(0);
+                    if (player.getWorldPosY() < 0) player.setWorldPosY(0);
+                    if (player.getWorldPosX() > worldBounds.w - 64) player.setWorldPosX(worldBounds.w - 64);
+                    if (player.getWorldPosY() > worldBounds.h - 64) player.setWorldPosY(worldBounds.h - 64);
+
                     accumulator -= dt;
                 }
+
+                camera.x = player.getWorldPosX() - (camera.w / 2) + 32;
+                camera.y = player.getWorldPosY() - (camera.h / 2) + 32;
+
+                camera.x = SDL_clamp(camera.x, 0, worldBounds.w - camera.w);
+                camera.y = SDL_clamp(camera.y, 0, worldBounds.h - camera.h);
 
                 alpha = accumulator / dt;
                 
                 SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
                 SDL_RenderClear(renderer.get());
-                gt.render(100, 100);
+                
+                bgDst = { -camera.x, -camera.y, worldBounds.w, worldBounds.h };
+                SDL_RenderTexture(renderer.get(), background, NULL, &bgDst);
+                player.draw(renderer.get(), camera);
+    
                 fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
                 fps.draw(renderer.get());
                 break;
