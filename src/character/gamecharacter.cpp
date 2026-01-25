@@ -3,25 +3,22 @@
 
 GameCharacter::GameCharacter(SDL_Renderer* renderer) {
     texture = IMG_LoadTexture(renderer, Paths::getInstance().IMAGES("samurai.png").c_str());
-    worldPos = { 100.0f, 100.0f, 64.0f, 64.0f }; // Size of 1 sprite frame
+    worldPos = { 100.0f, 100.0f, 64.0f, 64.0f };
 }
 
 GameCharacter::~GameCharacter() {
-
+    
 }
 
 void GameCharacter::update(float dt, float vx, float vy) {
-    // Update Position
     worldPos.x += vx * 300.0f * dt;
     worldPos.y += vy * 300.0f * dt;
 
-    // Determine Direction Row
     if (vy > 0) direction = 0;
     else if (vx < 0) direction = 1;
     else if (vx > 0) direction = 2;
     else if (vy < 0) direction = 3;
 
-        // Animate if moving
     if (vx != 0 || vy != 0) {
         animTimer += dt;
             if (animTimer > 0.15f) {
