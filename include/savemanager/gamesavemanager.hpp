@@ -27,10 +27,6 @@ class GameSaveManager {
     private:
         void createFolderIfNotExists();
         bool checkIfFileExists(GameSaveManager::SaveType type);
-    
-    // private:
-    //     nlohmann::json saveFile;
-    //     nlohmann::json saveConfigFile;
 };
 
 #endif
