@@ -5,6 +5,7 @@
 #include "../../utility/paths.hpp"
 #include "../../include/menu/gamemainmenu.hpp"
 #include "../../include/menu/gamesettingsmenu.hpp"
+#include "../../include/savemanager/gamesavemanager.hpp"
 
 GameWindow::GameWindow() {
     try {
@@ -136,6 +137,14 @@ void GameWindow::run() {
 
     GameMainMenu gameMainMenu(renderer.get(), font);
     GameSettingsMenu gameSettings;
+    GameSaveManager saveManager;
+
+    saveManager.saveConfig(std::map<std::string, std::string>({
+        {"Test", "10"},
+        {"Res", "1024x768"}
+    }));
+
+    saveManager.loadConfig();
 
     const float dt = 0.01f; 
     float accumulator = 0.0f;
