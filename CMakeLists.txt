@@ -20,6 +20,9 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/menu/gamesettingsmenu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/savemanager/gamesavemanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/character/gamecharacter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/healthcomponent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/combatcomponent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/character/gamemaincharacter.cpp
 )
 
 set(
@@ -33,6 +36,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/include/menu
     ${CMAKE_CURRENT_SOURCE_DIR}/include/savemanager
     ${CMAKE_CURRENT_SOURCE_DIR}/include/character
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/actor
 )
 
 set(LOGGER ${CMAKE_CURRENT_SOURCE_DIR}/utility)
