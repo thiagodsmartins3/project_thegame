@@ -8,6 +8,7 @@
 #include "../../include/menu/gamesettingsmenu.hpp"
 #include "../../include/savemanager/gamesavemanager.hpp"
 #include "../../include/character/gamecharacter.hpp"
+#include "../../include/character/gamemaincharacter.hpp"
 
 GameWindow::GameWindow() {
     try {
@@ -139,6 +140,7 @@ void GameWindow::run() {
 
     GameMainMenu gameMainMenu(renderer.get(), font);
     GameCharacter player(renderer.get());
+    GameMainCharacter mainPlayer(100, 100, renderer.get());
     SDL_Texture* background = IMG_LoadTexture(renderer.get(), Paths::getInstance().IMAGES("background.png").c_str());
     SDL_FRect camera = { 0, 0, 1280, 720 };
     SDL_FRect worldBounds = { 0, 0, 2560, 1440 };
@@ -209,38 +211,41 @@ void GameWindow::run() {
                     }
                 }
 
-                keys = const_cast<bool*>(SDL_GetKeyboardState(NULL));
-                vx = 0, vy = 0;
-                if (keys[SDL_SCANCODE_A]) vx = -1;
-                if (keys[SDL_SCANCODE_D]) vx = 1;
-                if (keys[SDL_SCANCODE_W]) vy = -1;
-                if (keys[SDL_SCANCODE_S]) vy = 1;
+                // keys = const_cast<bool*>(SDL_GetKeyboardState(NULL));
+                // vx = 0, vy = 0;
+                // if (keys[SDL_SCANCODE_A]) vx = -1;
+                // if (keys[SDL_SCANCODE_D]) vx = 1;
+                // if (keys[SDL_SCANCODE_W]) vy = -1;
+                // if (keys[SDL_SCANCODE_S]) vy = 1;
+
+                mainPlayer.move();
 
                 while (accumulator >= dt) {
-                    player.update(dt, vx, vy);
+                    mainPlayer.update(dt, worldBounds);
+                    // player.update(dt, vx, vy);
 
-                    if (player.getWorldPosX() < 0) player.setWorldPosX(0);
-                    if (player.getWorldPosY() < 0) player.setWorldPosY(0);
-                    if (player.getWorldPosX() > worldBounds.w - 64) player.setWorldPosX(worldBounds.w - 64);
-                    if (player.getWorldPosY() > worldBounds.h - 64) player.setWorldPosY(worldBounds.h - 64);
+                    // if (player.getWorldPosX() < 0) player.setWorldPosX(0);
+                    // if (player.getWorldPosY() < 0) player.setWorldPosY(0);
+                    // if (player.getWorldPosX() > worldBounds.w - 64) player.setWorldPosX(worldBounds.w - 64);
+                    // if (player.getWorldPosY() > worldBounds.h - 64) player.setWorldPosY(worldBounds.h - 64);
 
                     accumulator -= dt;
                 }
 
-                camera.x = player.getWorldPosX() - (camera.w / 2) + 32;
-                camera.y = player.getWorldPosY() - (camera.h / 2) + 32;
+                // camera.x = player.getWorldPosX() - (camera.w / 2) + 32;
+                // camera.y = player.getWorldPosY() - (camera.h / 2) + 32;
 
-                camera.x = SDL_clamp(camera.x, 0, worldBounds.w - camera.w);
-                camera.y = SDL_clamp(camera.y, 0, worldBounds.h - camera.h);
+                // camera.x = SDL_clamp(camera.x, 0, worldBounds.w - camera.w);
+                // camera.y = SDL_clamp(camera.y, 0, worldBounds.h - camera.h);
 
                 alpha = accumulator / dt;
                 
                 SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
                 SDL_RenderClear(renderer.get());
                 
-                bgDst = { -camera.x, -camera.y, worldBounds.w, worldBounds.h };
-                SDL_RenderTexture(renderer.get(), background, NULL, &bgDst);
-                player.draw(renderer.get(), camera);
+                // bgDst = { -camera.x, -camera.y, worldBounds.w, worldBounds.h };
+                // SDL_RenderTexture(renderer.get(), background, NULL, &bgDst);
+                //player.draw(renderer.get(), camera);
     
                 fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
                 fps.draw(renderer.get());

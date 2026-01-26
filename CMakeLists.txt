@@ -22,6 +22,10 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/character/gamecharacter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/healthcomponent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/combatcomponent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/drawcomponent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/controllercomponent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/cameraactor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/character/gamemaincharacter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/character/gamemaincharacter.cpp
 )
 
