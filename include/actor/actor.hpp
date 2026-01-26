@@ -8,7 +8,8 @@ class Actor {
         Actor();
         void SetPosition(float posX, float posY);
         SDL_FRect GetPosition() const;
-        SDL_Point GetCenterPosition() const;
+        SDL_FPoint GetCenterPosition() const;
+        virtual void Tick(float deltaTime);
         virtual ~Actor();
 
     private:
