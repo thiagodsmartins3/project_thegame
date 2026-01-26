@@ -9,10 +9,10 @@ class ActorCamera: public Actor {
         ActorCamera(float width, float height);
         void Tick(float deltaTime) override;
         void Clamp(SDL_FRect bounds);
-        
+
     private:
         SDL_FRect viewRect;
-        Actor* actorTaget;
+        Actor* actorTarget;
 };
 
 #endif
