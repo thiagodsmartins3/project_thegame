@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SDL3_image/SDL_image.h>
 #include "../../include/window/gamewindow.hpp"
 #include "../../include/texture/gametexture.hpp"
 #include "../exception/exception.hpp"
@@ -6,6 +7,10 @@
 #include "../../include/menu/gamemainmenu.hpp"
 #include "../../include/menu/gamesettingsmenu.hpp"
 #include "../../include/savemanager/gamesavemanager.hpp"
+#include "../../include/character/gamecharacter.hpp"
+#include "../../include/actor/actorcamera.hpp"
+#include "../../include/actor/actorcharacter.hpp"
+#include "../../include/actor/actorscenario.hpp"
 
 GameWindow::GameWindow() {
     try {
@@ -133,11 +138,23 @@ GameWindow::~GameWindow() {
 void GameWindow::run() {
     isRunning = true;
     std::string path = Paths::getInstance().IMAGES("cat_img.png");
-    GameTexture gt(path, renderer);
+    // GameTexture gt(path, renderer);
 
     GameMainMenu gameMainMenu(renderer.get(), font);
+    SDL_Texture* background = IMG_LoadTexture(renderer.get(), Paths::getInstance().IMAGES("background.png").c_str());
+    SDL_Texture* character = IMG_LoadTexture(renderer.get(), Paths::getInstance().IMAGES("samurai.png").c_str());
+    
     GameSettingsMenu gameSettings;
     GameSaveManager saveManager;
+
+    ActorScenario* Level = new ActorScenario(background, 2000, 2000);
+    ActorCharacter* Player = new ActorCharacter(character);
+    ActorCamera* Camera = new ActorCamera(500, 500);
+
+    Camera->Target(Player);
+    Player->SetPosition({ 100, 100, 64, 64 });
+
+    SDL_FRect RenderView;
 
     saveManager.saveConfig(std::map<std::string, std::string>({
         {"Test", "10"},
@@ -200,6 +217,11 @@ void GameWindow::run() {
                 }
 
                 while (accumulator >= dt) {
+                    Player->Tick(dt);
+                    Level->Constraint(Player);
+                    Camera->Tick(dt);
+                    Camera->Clamp(Level->ScenarioBounds());
+
                     accumulator -= dt;
                 }
 
@@ -207,7 +229,12 @@ void GameWindow::run() {
                 
                 SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
                 SDL_RenderClear(renderer.get());
-                gt.render(100, 100);
+                
+                RenderView = Camera->CameraView();
+
+                Level->Render(renderer.get(), RenderView);
+                Player->Render(renderer.get(), RenderView);
+                
                 fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
                 fps.draw(renderer.get());
                 break;
@@ -219,6 +246,10 @@ void GameWindow::run() {
 
         SDL_RenderPresent(renderer.get());
     }
+
+    delete Level; 
+    delete Player;
+    delete Camera; 
 }
 
 void GameWindow::getAvaliableDisplayResolutions() {
