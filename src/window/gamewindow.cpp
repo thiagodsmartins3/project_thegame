@@ -152,12 +152,13 @@ void GameWindow::run() {
     GameSettingsMenu gameSettings;
     GameSaveManager saveManager;
 
-    ActorScenario* Level = new ActorScenario(2000, 2000);
+    ActorScenario* Level = new ActorScenario(background, 2000, 2000);
     ActorCharacter* Player = new ActorCharacter();
     ActorCamera* Camera = new ActorCamera(500, 500);
 
     Camera->Target(Player);
     Player->SetPosition({ 100, 100, 64, 64 });
+    SDL_FRect RenderView;
 
     saveManager.saveConfig(std::map<std::string, std::string>({
         {"Test", "10"},
@@ -233,8 +234,10 @@ void GameWindow::run() {
                 SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
                 SDL_RenderClear(renderer.get());
                 
-                Level->Render(renderer.get(), Camera->CameraView());
-                Player->Render(renderer.get(), Camera->CameraView());
+                RenderView = Camera->CameraView();
+
+                Level->Render(renderer.get(), RenderView);
+                Player->Render(renderer.get(), RenderView);
                 
                 fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
                 fps.draw(renderer.get());
