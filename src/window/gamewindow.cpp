@@ -8,6 +8,9 @@
 #include "../../include/menu/gamesettingsmenu.hpp"
 #include "../../include/savemanager/gamesavemanager.hpp"
 #include "../../include/character/gamecharacter.hpp"
+#include "../../include/actor/actorcamera.hpp"
+#include "../../include/actor/actorcharacter.hpp"
+#include "../../include/actor/actorscenario.hpp"
 
 GameWindow::GameWindow() {
     try {
@@ -149,6 +152,13 @@ void GameWindow::run() {
     GameSettingsMenu gameSettings;
     GameSaveManager saveManager;
 
+    ActorScenario* Level = new ActorScenario(2000, 2000);
+    ActorCharacter* Player = new ActorCharacter();
+    ActorCamera* Camera = new ActorCamera(500, 500);
+
+    Camera->Target(Player);
+    Player->SetPosition({ 100, 100, 64, 64 });
+
     saveManager.saveConfig(std::map<std::string, std::string>({
         {"Test", "10"},
         {"Res", "1024x768"}
@@ -209,39 +219,23 @@ void GameWindow::run() {
                     }
                 }
 
-                keys = const_cast<bool*>(SDL_GetKeyboardState(NULL));
-                vx = 0, vy = 0;
-                if (keys[SDL_SCANCODE_A]) vx = -1;
-                if (keys[SDL_SCANCODE_D]) vx = 1;
-                if (keys[SDL_SCANCODE_W]) vy = -1;
-                if (keys[SDL_SCANCODE_S]) vy = 1;
-
                 while (accumulator >= dt) {
-                    player.update(dt, vx, vy);
-
-                    if (player.getWorldPosX() < 0) player.setWorldPosX(0);
-                    if (player.getWorldPosY() < 0) player.setWorldPosY(0);
-                    if (player.getWorldPosX() > worldBounds.w - 64) player.setWorldPosX(worldBounds.w - 64);
-                    if (player.getWorldPosY() > worldBounds.h - 64) player.setWorldPosY(worldBounds.h - 64);
+                    Player->Tick(dt);
+                    Level->Constraint(Player);
+                    Camera->Tick(dt);
+                    Camera->Clamp(Level->ScenarioBounds());
 
                     accumulator -= dt;
                 }
-
-                camera.x = player.getWorldPosX() - (camera.w / 2) + 32;
-                camera.y = player.getWorldPosY() - (camera.h / 2) + 32;
-
-                camera.x = SDL_clamp(camera.x, 0, worldBounds.w - camera.w);
-                camera.y = SDL_clamp(camera.y, 0, worldBounds.h - camera.h);
 
                 alpha = accumulator / dt;
                 
                 SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0xFF);
                 SDL_RenderClear(renderer.get());
                 
-                bgDst = { -camera.x, -camera.y, worldBounds.w, worldBounds.h };
-                SDL_RenderTexture(renderer.get(), background, NULL, &bgDst);
-                player.draw(renderer.get(), camera);
-    
+                Level->Render(renderer.get(), Camera->CameraView());
+                Player->Render(renderer.get(), Camera->CameraView());
+                
                 fps.update(alpha, (int)(1.0f / frameTime), font, renderer.get());
                 fps.draw(renderer.get());
                 break;

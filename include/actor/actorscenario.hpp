@@ -8,6 +8,8 @@ class ActorScenario: public Actor {
     public:
         ActorScenario(float width, float height);
         void Render(SDL_Renderer* renderer, SDL_FRect cameraView);
+        void Constraint(Actor* actor);
+        SDL_FRect ScenarioBounds() const;
 
     private:
         SDL_FRect scenarioBounds;

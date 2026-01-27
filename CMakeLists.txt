@@ -23,6 +23,7 @@ set(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/actor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/actorcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/actorscenario.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/actor/actorcharacter.cpp
 )
 
 set(

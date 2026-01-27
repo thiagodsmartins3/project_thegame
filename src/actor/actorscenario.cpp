@@ -14,3 +14,18 @@ void ActorScenario::Render(SDL_Renderer* renderer, SDL_FRect cameraView) {
         SDL_RenderLine(renderer, i - cameraView.x, -cameraView.y, i - cameraView.x, scenarioBounds.h - cameraView.y);
     }
 }
+
+SDL_FRect ActorScenario::ScenarioBounds() const {
+    return scenarioBounds;
+}
+
+void ActorScenario::Constraint(Actor* actor) {
+    if (!actor) return;
+
+    SDL_FRect pos = actor->GetPosition();
+
+    pos.x = SDL_clamp(pos.x, scenarioBounds.x, scenarioBounds.w - pos.w);
+    pos.y = SDL_clamp(pos.y, scenarioBounds.y, scenarioBounds.h - pos.h);
+
+    actor->SetPosition(pos.x, pos.y);
+}

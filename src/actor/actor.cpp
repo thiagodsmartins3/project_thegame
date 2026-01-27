@@ -5,9 +5,21 @@ Actor::Actor() {
     isActive = true;
 }
 
+void Actor::SetPosition(SDL_FRect worldPosition) {
+    actor = worldPosition;
+}
+
 void Actor::SetPosition(float posX, float posY) {
     actor.x = posX;
     actor.y = posY;
+}
+
+void Actor::SetPositionX(float pos) {
+    actor.x = pos;
+}
+
+void Actor::SetPositionY(float pos) {
+    actor.y = pos;
 }
 
 SDL_FRect Actor::GetPosition() const {

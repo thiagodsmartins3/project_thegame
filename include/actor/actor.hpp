@@ -6,7 +6,10 @@
 class Actor {
     public:
         Actor();
+        void SetPosition(SDL_FRect worldPosition);
         void SetPosition(float posX, float posY);
+        void SetPositionX(float pos);
+        void SetPositionY(float pos);
         SDL_FRect GetPosition() const;
         SDL_FPoint GetCenterPosition() const;
         virtual void Tick(float deltaTime);
