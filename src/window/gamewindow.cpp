@@ -141,23 +141,19 @@ void GameWindow::run() {
     // GameTexture gt(path, renderer);
 
     GameMainMenu gameMainMenu(renderer.get(), font);
-    GameCharacter player(renderer.get());
     SDL_Texture* background = IMG_LoadTexture(renderer.get(), Paths::getInstance().IMAGES("background.png").c_str());
-    SDL_FRect camera = { 0, 0, 1280, 720 };
-    SDL_FRect worldBounds = { 0, 0, 2560, 1440 };
-    SDL_FRect bgDst;
-    float vx, vy;
-    bool* keys;
-
+    SDL_Texture* character = IMG_LoadTexture(renderer.get(), Paths::getInstance().IMAGES("samurai.png").c_str());
+    
     GameSettingsMenu gameSettings;
     GameSaveManager saveManager;
 
     ActorScenario* Level = new ActorScenario(background, 2000, 2000);
-    ActorCharacter* Player = new ActorCharacter();
+    ActorCharacter* Player = new ActorCharacter(character);
     ActorCamera* Camera = new ActorCamera(500, 500);
 
     Camera->Target(Player);
     Player->SetPosition({ 100, 100, 64, 64 });
+
     SDL_FRect RenderView;
 
     saveManager.saveConfig(std::map<std::string, std::string>({
@@ -250,6 +246,10 @@ void GameWindow::run() {
 
         SDL_RenderPresent(renderer.get());
     }
+
+    delete Level; 
+    delete Player;
+    delete Camera; 
 }
 
 void GameWindow::getAvaliableDisplayResolutions() {

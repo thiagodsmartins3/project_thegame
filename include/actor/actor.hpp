@@ -10,6 +10,8 @@ class Actor {
         void SetPosition(float posX, float posY);
         void SetPositionX(float pos);
         void SetPositionY(float pos);
+        void IsActive(bool active);
+        bool IsActive() const;
         SDL_FRect GetPosition() const;
         SDL_FPoint GetCenterPosition() const;
         virtual void Tick(float deltaTime);

@@ -22,6 +22,14 @@ void Actor::SetPositionY(float pos) {
     actor.y = pos;
 }
 
+void Actor::IsActive(bool active) {
+    isActive = active;
+}
+
+bool Actor::IsActive() const {
+    return isActive;
+}
+
 SDL_FRect Actor::GetPosition() const {
     return actor;
 }
