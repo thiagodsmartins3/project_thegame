@@ -264,7 +264,7 @@ void GameWindow::getAvaliableDisplayResolutions() {
             std::cout << i << ":" << modes[i]->w << " x " << "modes[i]->h" << std::endl;
         }
         
-        SDL_free(modes); 
+        SDL_free(modes);
     }
 }
 
